@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="background: white;">  <div  style="text-align: center;" >  <h5>BIENVENIDO TONY </h5></div>
+    <br>
+
+
+
+{% for suspedido in suspedidos %} 
+<table class="table table-bordered" style="color: rgb(2, 2, 2);">
+<tbody>
+<tr class="text-center" >
+    <td style="background: rgb(243, 185, 27);"> USUARIO</td>  <td style="background: rgb(243, 185, 27);"> PEDIDO </td> <td style="background: rgb(243, 185, 27);">FECHA</td> <td style="background: rgb(243, 185, 27);" >PRECIO</td><td style="background: rgb(243, 185, 27);">COMENTARIOS</td><td style="background: rgb(243, 185, 27);">INFO CONTACTO</td>
+</tr>
+
+<tr class="text-center">
+     <td >{{ suspedido.user }} <div class="btn" style="background: red;border-radius: 20px">
+        <a href="{% url 'listop' suspedido.id %}" style="text-decoration: none;color: white;">listo</a></div></div></td>
+    
+    
+    <td> {{ suspedido.content }} </td> <td>{{ suspedido.timestamp }}</td> <td>{{ suspedido.masinfo }}</td><td>{{ suspedido.comentarios }}</td><td>{{ suspedido.memorias }}</td>
+</tr>
+</tbody>
+</table>
+
+{% endfor %}
+
+
+
+
+
+</div>
+
+{% endblock %}
