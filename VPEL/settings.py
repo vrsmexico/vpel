@@ -87,7 +87,7 @@ else:
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'VPEL',
         'USER': 'vpel1053',
-        'PASSWORD': 'a1Fuegembel',
+        'PASSWORD': 'Jm1053',
         'HOST': 'localhost',
         'PORT': '',
         }
