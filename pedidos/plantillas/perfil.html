@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="background: white;">  <div  style="text-align: center;" >  <h5>HISTORIAL DE COMPRAS </h5></div>
+    <br>
+
+
+
+{% for suspedido in suspedidos %} 
+<table class="table table-bordered" style="color: rgb(2, 2, 2);">
+<tbody>
+<tr class="text-center" >
+    <td style="background: rgb(243, 185, 27);"> ESTATUS</td>  <td style="background: rgb(243, 185, 27);"> PEDIDO </td> <td style="background: rgb(243, 185, 27);">FECHA</td> <td style="background: rgb(243, 185, 27);" >PRECIO</td><td style="background: rgb(243, 185, 27);">COMENTARIOS</td>
+</tr>
+<tr class="text-center">
+    {% if suspedido.entregado is True %} <td style="background: chartreuse;">Entregado </td>{% else %}<td style="background: rgb(192, 192, 190);">En proceso</td> {% endif %}     
+    
+    
+    
+    <td> {{ suspedido.content }} </td> <td>{{ suspedido.timestamp }}</td> <td>{{ suspedido.masinfo }}</td><td>{{ suspedido.comentarios }}</td>
+</tr>
+</tbody>
+</table>
+
+{% endfor %}
+
+
+
+
+
+</div>
+
+{% endblock %}

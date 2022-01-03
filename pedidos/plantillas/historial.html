@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+    {%load static%}
+    {% block content %}
+
+{% if total == 0 %}
+    <div style="background-color: #dc3545;color: rgb(255, 255, 255);text-align: center; font-size: medium;"> No hay peliculas agregadas</div><br>
+{% else %}
+    
+
+    <table class="table table-bordered border-primary" style="color: rgb(2, 2, 2);max-width: 80%;">
+        <thead class="table-dark">
+            <td class="text-center">  PELICULA</td>
+            <td class="text-center">  PRECIO</td>
+        </thead>
+        <tbody>
+
+    {% for pedid in pedido %}
+    <tr class="text-center">
+    <td>*{{pedid.titulo1}}</td>
+    <td>{{pedid.precio}} Pesos </td>
+    </tr>
+    {% endfor %}
+    
+
+    {% if memoria == 1 %}
+    <tr class="text-center">
+        <td>
+            Memoria usb
+        </td>
+        <td>
+            150 Pesos
+        </td>
+    </tr>
+    {% endif %}
+
+    </tbody>
+    <tr class="table-dark text-center">
+        <td>
+            TOTAL A PAGAR:
+        </td>
+        <td>
+            {{total}} pesos
+        </td>
+    </tr>
+    
+   
+
+    
+    </table>
+    <form action="/confi/" method="POST" style="text-align: center;" class="d-flex justify-content-center"> 
+        {% csrf_token %}
+        <textarea class="form" type="text" placeholder="Ingrese alguna otra pelicula no encontrada en el catalogo o algun comentario adicional.El total se le confirmara por telefono" name="conficomp" style="min-width: 65%"></textarea> &nbsp
+        <input type="submit" class="btn btn-outline-success" value="CONFIRMAR COMPRA"  style="border-radius: 20px">
+        
+    </form>
+    <br>
+    <br>
+
+
+
+    
+
+        {% if memoria == 1 %}
+        <div style="background-color: #dc3545;color: rgb(255, 255, 255);text-align: center; font-size: medium;"> <h5>Para que no se le cobre la memoria usb es necesario comprar minimo 10 peliculas</h5></div>
+        <br>
+        {% endif %}
+
+{% endif %}
+{% endblock %}  
