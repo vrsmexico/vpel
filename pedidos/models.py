@@ -104,6 +104,8 @@ class servicio(models.Model):
         verbose_name='servicio'
         verbose_name_plural='servicios'
         ordering=['fecha','-created']
+    def __str__(self):
+        return f'{self.titulo1}'
 
 class Pedidos(models.Model):
     user=models.CharField(max_length=100,null=True,blank=True)
@@ -118,3 +120,24 @@ class Pedidos(models.Model):
         ordering=['-timestamp']
     def __str__(self):
         return f'{self.user}:{self.content}'
+class Gastos(models.Model):
+    created=models.DateTimeField(auto_now_add=True)
+    cantidad=models.FloatField(null=True,blank=True)
+    ganoper=models.BooleanField(default=False)
+    concep=models.CharField(max_length=50,null=True,blank=True)
+    importancia=models.BooleanField(default=False)
+    class Meta:
+        ordering=['-created']
+    def __str__(self):
+        return f'{self.cantidad}'
+class Cuentas(models.Model):
+    create=models.DateTimeField(auto_now_add=True)
+    canti=models.FloatField(null=True,blank=True)
+    ganper=models.BooleanField(default=False)
+    conce=models.CharField(max_length=50,null=True,blank=True)
+    importa=models.BooleanField(default=False)
+    entraporcen=models.BooleanField(default=False)
+    class Meta:
+        ordering=['-create']
+    def __str__(self):
+        return f'{self.canti}'

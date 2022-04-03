@@ -1,9 +1,13 @@
 <html>
+    
+    
     <!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     
-   
+  
        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    
        <link rel="shortcut icon" type="image/x-icon" href="../media/cono.ico">
 <head>
 
@@ -12,6 +16,21 @@
 <!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY-->
 
 <body>
+    
+    {% load static %}
+    
+
+        
+        <script src="{% static 'lib/highcharts-8.1.2/highcharts.js' %}"></script>
+        <script src="{% static 'lib/highcharts-8.1.2/modules/exporting.js' %}"></script>
+        <script src="{% static 'lib/highcharts-8.1.2/modules/export-data.js' %}"></script>
+        <script src="{% static 'lib/highcharts-8.1.2/modules/accessibility.js' %}"></script>
+        
+
+
+
+
+
 <div id="contenido"style="min-width: 1370px;max-width: non;width: 100%;background-color: withe;height:100% ;min-height: 1080px;max-height: non;height:100%;"><!--CONTENEDOR DE TODO EL BODY--> 
     <!--parte derecha-->
     <div style="background-color: rgb(31, 43, 78);width: 28%;float: right;min-height: 1080px;height:100%;box-shadow: -6px 6px 3px   rgba(0, 0, 0, 0.267);padding: 1%;overflow-y: scroll;">
@@ -19,11 +38,7 @@
                 <div style="width: 40%;float: left;"><!--USUARIO -->
                     {% if request.user.is_authenticated %}
                     <a   href="/perfil/" style="text-decoration: none;"><h4 style="color: aliceblue;"> {{ user.username }}</h4></a>
-                    
-
-
-                   
-                   {% endif %}
+                    {% endif %}
 
                 </div>
                 <div style="width: 60%;float: right;text-align:right ;"><!--LOGO Y MARCA -->
@@ -41,7 +56,7 @@
                     </div>
                     <div  style="width: 15%;float: right;text-align: right;" >
                         <h3 style="color: rgb(206, 245, 175);" > {{cantp}}</h3> 
-                        
+                        <!--solucion para paginacion a la izquierda hehe-->
                 
                     </div>
                  </div>
@@ -50,8 +65,6 @@
 
 
                  {% if request.session.carro.items %}
-                    
-
                     {% for key,value in request.session.carro.items %}
     <!--UN PEDIDO--><div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
                         <div style="width: 73%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
@@ -96,8 +109,7 @@
                     
                     {% if request.user.is_authenticated %}    
                 <h4 style="color: rgb(247, 238, 220);" > Total <span style="color: rgb(127, 255, 138);">{{total_carro}}</span> </h4>
-                <a href="{% url 'hist' total_carro %}" class="btn btn-success" style="border-radius: 20px">Confirmar pedido</a>
-                <br><br>
+                <br>
                 <h5 style="color: aliceblue;" >Las peliculas que no encuentre puede agregarlas al confirmar su pedido.<br></h5>
                 {% else %}
                     <br>
@@ -129,60 +141,140 @@
             </div>
             <div style="width: 50%;float: right;text-align:right"> 
                 {% if request.user.is_authenticated %}
-                    {% if user.is_superuser %}
-
-                   <a href="/vpel1053/" style="text-decoration: none;color: rgba(170, 122, 82, 0.986);font-size:30px;font-weight: 500;">PEDIDOS </a>
-                    {% endif %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-
-                    {% if user.is_staff %}
-
-                   <a href="/agregar/" style="text-decoration: none;color: rgba(7, 143, 7, 0.986);font-size:30px;font-weight: 500;">AGREGAR </a>
-                    {% endif %}
-                    
-                    
-                {% endif %}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                {% if request.user.is_authenticated %}
                     <a href="/logout/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Cerrar sesión </a>
                     {% else %}
                     <a href="/login/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Iniciar sesión </a>
                    {% endif %}
                 
-                
-
-
-
-
-                
              </div>
 
         </div>
-        <!--NOTAS ARRIBA-->
-        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:40px;color: rgba(139, 27, 27, 0.61);"><!--MENU--> 
-            <h5></h5>
-        </div>
-        <!--CONTENIDO PELICULAS-->
-        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;"><!--MENU--> 
-            {% if form.errors %}
+        
+        <!--CONTENIDO -->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;">
+        
+            <figure class="highcharts-figure">
+                <div id="container"></div>
+                
+            </figure>
+            </div>
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;">
+                <div  style="text-align: center;" >  <h5>GASTOS SEMANALES CON RESPECTO AL TOTAL GANADO ({{ganados}})POR SEMANA</h5></div>
+            <br>
 
-            <p style="color: red;"> ERROR BAVOCHO </p>
-        
+            
+            {% for x,y,z in matrizsem %}
+            <div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    {{y}}
+                </div>
+                <div style="width: 30%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                    Cantidad:{{z}}
+                
+                </div>
+                <div style="width: 35%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                    porcentaje: {{x}}% 
+                    
+                    </div>
+            </div>
+            
+            {% endfor %}
+            {%if gastosmayores %}
+            <div  style="text-align: center;" id="prueba" >  <h5>Gastos que alcansan o superan lo ganado por semana </h5></div>
+            {% for x,y,z in gastosmayores %}
+            <div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    {{y}}
+                </div>
+                <div style="width: 30%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                    Cantidad:{{z}}
+                
+                </div>
+                <div style="width: 35%;float: right; height:100%;text-align:center;color: #ff0000;"><!--PRECIO-->
+                    porcentaje: {{x}}% 
+                    
+                    </div>
+            </div>
+            
+            {% endfor %}
             {% endif %}
+            <h5> Total ahorrado:{{total}} <br>
+            Total ahorrado esta semana:{{totalsemana}}</h5>
         
-        
-            <form enctype="multipart/form-data"   method="POST" action="" >
-                {% csrf_token %}
-                <table>
-                    {{ form.as_table}}
-                </table>
-                <input type="submit" value="agregar">
-        
-            </form>
+
+            <div>
+               <h4> Estamos en la semana: {{sema}}</h4>
+                <h4>Selecciona el mes y la semana deseada: </h4>
+
+                
+                {% include "calendario.html" %}
+
+                <h4>Semana seleccionada:{{semana}}</h4>
+            </div>
+              
+              
+
+
+
+            
+
+
+
+
         </div>
-        <!-- PIE DE PAGINA  -->
-        <!--NOTAS ABAJO-->
+        
+
+
+<!--java-->
+
+<script type="application/javascript">
+    Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Total gastado semana: {{semana}}: {{ gastos }} '
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>:{point.cant}-- {point.percentage:.1f} %'
+            }
+        }
+    },
+    
+    series: [{
+        name: 'Porcentaje',
+        colorByPoint: true,
+        data:   
+        {{ data|safe }}
+    
+    
+    }]
+});
+</script>
+
+
+
+
+
+
+
+
         
         <!--terminos y ayuda-->
         <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:60px;"><!--MENU--> 
@@ -191,15 +283,28 @@
 
         </div>
     </div>
+
+
+    <div id="liveToast" class="toast" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="2000">
+        <div class="alert alert-success" role="alert" style="position: absolute;text-align:center;top: 43px;left: 0px;min-width: 980px;width: 72%;">
+            <h5>EJEMPLO JEJEJEJ</h5>
+          </div>
+    </div>
+
 </div>
 
 
-
-
-
-
-
-
+  <script type="application/javascript">
+    var toastTrigger = document.getElementById('prueba')
+  var toastLiveExample = document.getElementById('liveToast')
+  if (toastTrigger) {
+     
+      var toast = new bootstrap.Toast(toastLiveExample)
+  
+      toast.show()
+    
+  }
+  </script>
 </body>
 
 

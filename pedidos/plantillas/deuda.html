@@ -1,0 +1,195 @@
+<html>
+    <!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+   
+       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+       <link rel="shortcut icon" type="image/x-icon" href="../media/cono.ico">
+<head>
+
+</head>
+
+<!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY-->
+
+<body>
+<div id="contenido"style="min-width: 1370px;max-width: non;width: 100%;background-color: withe;height:100% ;min-height: 1080px;max-height: non;height:100%;"><!--CONTENEDOR DE TODO EL BODY--> 
+    <!--parte derecha-->
+    <div style="background-color: rgb(31, 43, 78);width: 28%;float: right;min-height: 1080px;height:100%;box-shadow: -6px 6px 3px   rgba(0, 0, 0, 0.267);padding: 1%;overflow-y: scroll;">
+            <div style="width: 100%;overflow: hidden;margin-bottom: 30px;"><!--USUARIO,LOGO Y MARCA -->
+               
+                <div style="width: 60%;float: right;text-align:right ;"><!--LOGO Y MARCA -->
+                <h3 style="color: aliceblue;" > VPEL</h3>
+                </div>
+
+            </div>
+            <div style="padding: 0.1em;width: 100%;overflow: hidden;" ><!--LISTA DE PEDIDOS-->
+                
+                <div style="width: 100%;overflow: hidden"> <!--BARRA PAGINACION-->
+                    
+                 </div>
+                 
+                <h5 style="color: aliceblue;" >En caso de no recordar usuario o contraseña puede registrarse nuevamente<br></h5>
+                <a class="btn btn-success" href='/registro/'  style="background: #ff8a00;border-radius: 20px;box-shadow: 0 0 20px rgb(0 22 67 / 7%);
+                    border-radius: 40px;
+                    font-weight: 700;
+                    font-size: 15px;
+                    border: 1px solid transparent;
+                    white-space: nowrap;margin: 10px;">REGISTRARSE</a>
+            </div>
+            
+
+            
+
+    </div>
+    
+    <!--parte izquierda-->
+    <div style="background-color:rgb(245, 245, 245);float: left;min-width: 960px;width: 71.6%;min-height: 970px;overflow: hidden;">
+        <!--MENU-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;border-bottom-style: solid;border-bottom-width:2px;border-color: rgb(187, 187, 187);background-color: rgb(255, 255, 255);height:60px"><!--MENU--> 
+            <div style="width: 50%;float: left;text-align:left;">
+                <a href="/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Inicio </a> &nbsp;&nbsp;
+                <a href="/series/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Series</a>
+                 
+            </div>
+            <div style="width: 50%;float: right;text-align:right"> 
+                {% if request.user.is_authenticated %}
+                    <a href="/logout/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Cerrar sesión </a>
+                    {% else %}
+                    <a href="/login/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Iniciar sesión </a>
+                   {% endif %}
+                
+             </div>
+
+        </div>
+        
+        <!--CONTENIDO -->
+        <div class="container" style="background: white;text-align: center; height: 80%; ">
+            <div style="width: 100%;"><h3>Registo de deuda con Rocio</h3> <br></div>
+            <div  style="width: 37%;float: right;text-align: right;height: 40%;" >
+        
+                <!--solucion para paginacion a la izquierda hehe-->
+        
+            </div>
+            <div style="width: 25%;float: right;text-align: right;height: 40%;" >
+                
+
+            
+
+                <form enctype="multipart/form-data"  method="POST"  >
+                    {% csrf_token %}
+                    <h4 style="color: rgb(20, 163, 1);"> Cuanto se pago?:</h4>
+                    
+                    {{ forma.cantidad}} 
+                    <h4 style="color: rgb(20, 163, 1);"> Quien pago?:</h4>
+                    <div style="width: 33%;float: right" >
+                        <h4 style="color: rgb(158, 1, 163);"> Jose</h4></div>
+                    <div class="form-check-lg form-switch" style="width: 33%;float: right">
+                        
+
+                        {{ forma.ganoper}} 
+                        
+
+                    </div>
+                    <div style="width: 33%;float: right;text-align: right" >
+                        <h4 style="color: rgb(158, 1, 163);"> Rocio</h4> </div>
+                    <h4 style="color: rgb(20, 163, 1);"> Concepto:</h4>
+                    {{ forma.concep}}
+                    <div class="form-check form-switch" >
+                        {{ forma.importancia}}
+                        <label class="form-check-label" for="flexSwitchCheckDefault"><h5 style="color: rgb(163, 71, 1);"> ACTIVO SIGNIFICA ABONO</h5></label>
+                    </div>
+                    <style type="text/css" media="screen"> input[type=checkbox]
+                        {
+                          /* Double-sized Checkboxes */
+                           /* FF */
+                          -webkit-transform: scale(1.3); /* Safari and Chrome */
+                           /* Opera */
+                          padding: 7px;
+                        }</style>
+                    
+                    
+                    
+                    
+                    <input type="submit" value="agregar">
+            
+                </form>
+                
+            </div>
+            <div  style="width: 38%;float: right;text-align: right;height: 40%;" >
+        
+              <!--solucion para paginacion a la izquierda hehe-->
+        
+            </div>
+            <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;box-shadow: -6px 6px 3px   rgba(0, 0, 0, 0.267)">
+                <!--div dividir la parte de abajo del formulario -->
+                <div  style="text-align: center;" >  <h5>Deuda al momento:{{total}} y mas detalles:</h5></div>
+            <br>
+            {% for x,y,z in listar %}
+            <div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    Pago:ROCIO Fecha:{{z}}
+                </div>
+                <div style="width: 30%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                    Concepto:{{x}}
+                
+                </div>
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    Cantidad:{{y}}
+                </div>
+                
+            </div>
+            
+            {% endfor %}
+
+            
+            {% for x,y,z in listaj %}
+            <div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: rgb(219, 250, 215);margin: 1px;">
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    Pago:JOSE Fecha:{{z}}
+                </div>
+                <div style="width: 30%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                    Concepto:{{x}}
+                
+                </div>
+                <div style="width: 35%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                    Cantidad:{{y}}
+                </div>
+                
+            </div>
+            
+            {% endfor %}
+
+
+            </div>
+        </div>
+        
+        <!--terminos y ayuda-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:60px;"><!--MENU--> 
+            <div style="width: 50%;color: rgba(122, 124, 122, 0.986);float: left;text-align:left"> <h5>Terminos y condisciones</h5></div>
+            <div style="width: 50%;color: rgba(122, 124, 122, 0.986);float: right;text-align:right"> <h5>Ayuda </h5> </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+
+
+</html>
+
+
+
+
+
+

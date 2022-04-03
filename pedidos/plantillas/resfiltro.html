@@ -1,152 +1,335 @@
-{% extends "base.html" %}
-    {%load static%}
-
-
-{% block content %}
- 
-<nav  class="container align-items-center" style="min-height: 5vh"> 
-    <br>   
-
-
-
-    <div class="container align-items-center" style="text-align: center;">
-        <h5>Filtrar por:</h5> 
-        <div class="row justify-content-md-center">
-
-
-            <div class="col">
-                <form action="/resfiltro/" method="POST" style="text-align: center;" class="d-flex justify-content-center">
-                {% csrf_token %}
-
-
-                <select name="clasif"class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
-                <option value=0 selected >Calificación</option>
-                <option value="1" style="margin-left: 6px;">1 Estrella</option>
-                <option value="2"> 2 Estrellas</option>
-                <option value="3"> 3 Estrellas</option>
-                <option value="4"> 4 Estrellas</option>
-                <option value="5"> 5 Estrellas</option>
-                </select>
-
-
-                <select name="gene" class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
-                    <option value=0 selected style="color: rgb(255, 255, 255);">Genero</option>
-                    {% for genero in generos %}
-                    <option value={{genero.id}}>{{genero.genero}}</option>
-                    {% endfor %}
-                </select>
-                <select name="fec"class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;" >
-                    <option value=0 selected style="color: rgb(255, 255, 255);">Año</option>
-                    {% for fecha in fechas %}
-                    <option value={{fecha.id}}>{{fecha.fecha}}</option>
-                    {% endfor %}
-                </select>
-
-                 &nbsp
-                <input type="submit" class="btn-outline-success" style="border-radius: 40px;" value="VER" onclick=mensajes() >
-
-                </form>
-            </div>
-        </div>
-        <form action="/buscar/" method="POST" style="text-align: center;" class="d-flex justify-content-center"> 
-            {% csrf_token %}
-            <input class="form" type="text" placeholder="Ingrese el nombre a buscar" name="buscarpr"> &nbsp
-            <input type="submit" class="btn btn-outline-dark" value="Buscar"  style="border-radius: 20px">
-            
-        </form>
-    </div>
-    </nav>
-
-
-
-
-
-<div class="container " style="text-align: center;color: rgb(4, 148, 76);min-width: 960px;max-width: non;width: 970px;">
-<h2>{{mensaje}} </h2></div>
- 
-<div class="container align-content-center"  >
+<html>
+    <!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA--><!--PESTAÑA-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     
-        {% include "paginacion.html" %}
+   
+       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+       <link rel="shortcut icon" type="image/x-icon" href="../media/cono.ico">
+<head>
+
+</head>
+
+<!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY--><!--BODY-->
+
+<body>
+<div id="contenido"style="min-width: 1370px;max-width: non;width: 100%;background-color: withe;height:100% ;min-height: 1080px;max-height: non;height:100%;"><!--CONTENEDOR DE TODO EL BODY--> 
+    <!--parte derecha-->
+    <div style="background-color: rgb(31, 43, 78);width: 28%;float: right;min-height: 1080px;height:100%;box-shadow: -6px 6px 3px   rgba(0, 0, 0, 0.267);padding: 1%;overflow-y: scroll;">
+            <div style="width: 100%;overflow: hidden;margin-bottom: 30px;"><!--USUARIO,LOGO Y MARCA -->
+                <div style="width: 40%;float: left;"><!--USUARIO -->
+                    {% if request.user.is_authenticated %}
+                    <a   href="/perfil/" style="text-decoration: none;"><h4 style="color: aliceblue;"> {{ user.username }}</h4></a>
+                    {% endif %}
+
+                </div>
+                <div style="width: 60%;float: right;text-align:right ;"><!--LOGO Y MARCA -->
+                <h3 style="color: aliceblue;" > VPEL</h3>
+                </div>
+
+            </div>
+            <div style="padding: 0.1em;width: 100%;overflow: hidden;" ><!--LISTA DE PEDIDOS-->
+                
+                <div style="width: 100%;overflow: hidden"> <!--BARRA PAGINACION-->
+                    <div  style="width: 85%;float: left;" >
+    
+                        <h3 style="color: rgb(247, 220, 220);" > Peliculas a comprar</h3> 
+                
+                    </div>
+                    <div  style="width: 15%;float: right;text-align: right;" >
+                        <h3 style="color: rgb(206, 245, 175);" > {{cantp}}</h3> 
+                        
+                
+                    </div>
+                 </div>
+                 
+
+
+
+                 {% if request.session.carro.items %}
+                    {% for key,value in request.session.carro.items %}
+    <!--UN PEDIDO--><div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                        <div style="width: 73%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                            {{value.nombre}}
+                        </div>
+
+                        <div style="width: 27%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                            {% if pag_actual %}
+                        {{value.precio}} <a href="{% url 'eliminar' value.producto_id pag_actual ini %}" class="btn btn-outline-danger" style="align-items: center;justify-content: center;padding: 0.3em;width: 35%;">x</a>
+                        {% else %}
+                        {{value.precio}} <a href="{% url 'eliminar' value.producto_id 1 ini %}" class="btn btn-outline-danger" style="align-items: center;justify-content: center;padding: 0.3em;width: 35%;">x</a>
+                        {% endif %}
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                    {% if total_carro < 199 %}
+                    <div style="width: 100%;height:60px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                        <div style="width: 73%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                        Memoria USB
+                        </div>
+                        <div style="width: 27%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                        150.00 
+                        
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div style="width: 100%;height:35px;border-radius: 7px;padding-left: 2%;padding-top: 1%;padding-bottom: 1%;border-color: black;border-width: 20px;background-color: antiquewhite;margin: 1px;">
+                        <div style="width: 73%;float: left;padding: 0.01em;height:100%;"><!--PELICULA -->
+                        <h6>Sin peliculas a comprar</h6>
+                        </div>
+                        <div style="width: 27%;float: right; height:100%;text-align:center"><!--PRECIO-->
+                        
+                        </div>
+                    </div>
+
+
+                    {% endif %}
+
+                    
+                    
+                    {% if request.user.is_authenticated %}    
+                <h4 style="color: rgb(247, 238, 220);" > Total <span style="color: rgb(127, 255, 138);">{{total_carro}}</span> </h4>
+                {% if cantp > 0 %}
+                <a href="{% url 'hist' total_carro %}" class="btn btn-success" style="border-radius: 20px">Confirmar pedido</a>
+                <br><br>
+                {% endif %}
+                <h5 style="color: aliceblue;" >Las peliculas que no encuentre puede agregarlas al confirmar su pedido.<br></h5>
+                {% else %}
+                    <br>
+                    <h5 style="color: aliceblue;" >Es necesario registrarse o iniciar sesión para hacer un pedido:<br></h5>
+                    
+                    <a class="btn btn-success" href='/registro/'  style="background: #ff8a00;border-radius: 20px;box-shadow: 0 0 20px rgb(0 22 67 / 7%);
+                    border-radius: 40px;
+                    font-weight: 700;
+                    font-size: 15px;
+                    border: 1px solid transparent;
+                    white-space: nowrap;margin: 10px;">REGISTRARSE</a>
+
+                {% endif %}
+            </div>
+            
+
+            
 
     </div>
+    
+    <!--parte izquierda-->
+    <div style="background-color:rgb(245, 245, 245);float: left;min-width: 960px;width: 71.6%;min-height: 970px;overflow: hidden;">
+        <!--MENU-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;border-bottom-style: solid;border-bottom-width:2px;border-color: rgb(187, 187, 187);background-color: rgb(255, 255, 255);height:60px"><!--MENU--> 
+            <div style="width: 50%;float: left;text-align:left;">
+                <a href="/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Inicio </a> &nbsp;&nbsp;
+                <a href="/series/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Series</a>
+                 
+            </div>
+            <div style="width: 50%;float: right;text-align:right"> 
+                {% if request.user.is_authenticated %}
+                    <a href="/logout/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Cerrar sesión </a>
+                    {% else %}
+                    <a href="/login/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Iniciar sesión </a>
+                   {% endif %}
+                
+             </div>
 
-<div class="container" style="min-width: 960px;max-width: non;width: 970px;">
-    <div class="row" >
-        {%for pelicula in peliculas %}
-            <div class="col-md-3" style="max-width:240px ;width:235px;min-width: 230px">
-            
-                <div class="card" style="width:100%; margin: 5px 5px;">
-                    <img src="{{pelicula.imagen.url}}" class="card-img-top" >
-                    <div class="card-body" style="text-align: center;";>
-                        <h6 class="card-title" > {{pelicula.titulo1}}</h6>
-                        
-                        {% if pelicula.calificacion.calificacion == "5" %}
-                        
-                    
-                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="5" style="color:orange ;"></span>
-                        
-                        {% endif %}
+        </div>
+        <!--NOTAS ARRIBA-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:40px;color: rgba(139, 27, 27, 0.61);"><!--MENU--> 
+            <h5>Memoria usb gratis en la compra mínima de 10 películas,se entrega hasta su domicilio.</h5>
+        </div>
+        <!--CONTENIDO PELICULAS-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;"><!--MENU--> 
+          
 
-                        {% if pelicula.calificacion.calificacion == "4" %}
-                        
-                    
-                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="5" ></span>
-                        
-                        {% endif %}
-                        {% if pelicula.calificacion.calificacion == "3" %}
-                        
-                    
-                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="4" ></span>
-                        <span class="fa fa-star" id="5" ></span>
-                        
-                        {% endif %}
-                        {% if pelicula.calificacion.calificacion == "2" %}
-                        
-                    
-                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="3" ></span>
-                        <span class="fa fa-star" id="4" ></span>
-                        <span class="fa fa-star" id="5" ></span>
-                        
-                        {% endif %}
-                        
-                        {% if pelicula.calificacion.calificacion == "1" %}
-                        
-                    
-                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
-                        <span class="fa fa-star" id="2"></span>
-                        <span class="fa fa-star" id="3" ></span>
-                        <span class="fa fa-star" id="4" ></span>
-                        <span class="fa fa-star" id="5" ></span>
-                        
-                        {% endif %}
-                        
-
-                    </div><!-- cierra car body  -->
-                    <div class="card-footer text-center" ><div style="color: blue;"> {{ pelicula.tipo.tipo }} </div><a href="{% url 'agregarp' pelicula.id pag_actual ini %}" class="btn btn-outline-success" style="border-radius: 20px" >Agregar</a><div style="color: blue;"> ${{ pelicula.precio }} </div></div>
-                    
+            <nav  class="container align-items-center" style="min-width: 960px;min-height: 5vh"> 
+                <br>   
 
 
-                </div><!-- cierra car  -->
-            </div><!-- cierra col  -->
-        {%endfor %}
-    </div><!-- cierra car row  -->
-</div><!-- cierra car contenedor  -->
-<div>
-{% include "paginacion.html" %}
+ 
+                <div class="container align-items-center" style="min-width: 960px;text-align: center;">
+                    <h3>Filtrar por:</h3> 
+                    <div class="row justify-content-md-center" >
+        
+        
+                        <div class="col">
+                            <form action="/resfiltro/" method="POST" style="text-align: center;" class="d-flex justify-content-center">
+                            {% csrf_token %}
+
+    
+                            <select name="clasif"class="btn" style="background: rgb(31, 43, 78);width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
+                            <option value=0 selected >Calificación</option>
+                            <option value="1" style="margin-left: 6px;">1 Estrella</option>
+                            <option value="2"> 2 Estrellas</option>
+                            <option value="3"> 3 Estrellas</option>
+                            <option value="4"> 4 Estrellas</option>
+                            <option value="5"> 5 Estrellas</option>
+                            </select>
+    
+    
+                            <select name="gene" class="btn" style="background: rgb(31, 43, 78);width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
+                                <option value=0 selected style="color: rgb(255, 255, 255);">Genero</option>
+                                {% for genero in generos %}
+                                <option value={{genero.id}}>{{genero.genero}}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="fec"class="btn" style="background: rgb(31, 43, 78);width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;" >
+                                <option value=0 selected style="color: rgb(255, 255, 255);">Año</option>
+                                {% for fecha in fechas %}
+                                <option value={{fecha.id}}>{{fecha.fecha}}</option>
+                                {% endfor %}
+                            </select>
+
+                             &nbsp
+                            <input type="submit" class="btn-outline-success" style="border-radius: 40px;" value="VER" onclick=mensajes() >
+
+                            </form>
+                        </div>
+                    </div>
+                    <form action="/buscar/" method="POST" style="text-align: center;" class="d-flex justify-content-center"> 
+                        {% csrf_token %}
+                        <input class="form" type="text" placeholder="Ingrese el nombre de la pelicula a buscar" name="buscarpr" style="width: 400px;"> &nbsp
+                        <input type="submit" class="btn btn-outline-dark" value="Buscar"  style="border-radius: 20px">
+                        
+                    </form>
+                </div>
+                </nav>
+                <div class="container " style="text-align: center;color: rgb(4, 148, 76);min-width: 960px;max-width: non;width: 970px;">
+                    <h2>{{mensaje}} </h2></div>
+                <div class="container" style="min-width: 960px;width: 100%">
+                    <div style="width: 960px;overflow: hidden"> <!--BARRA PAGINACION-->
+                        <div  style="width: 30%;float: left;" >
+        
+                            {% include "paginacion.html" %}
+                    
+                        </div>
+                        <div  style="width: 70%;float: right;text-align: right;" >
+        
+                            <!--solucion para paginacion a la izquierda hehe-->
+                    
+                        </div>
+                     </div>
+                
+                <div class="container" style="min-width: 960px;width: 100%">
+                    <div class="row"  >
+                        {%for pelicula in peliculas %}
+                            <div class="col-md-3" style="max-width:240px ;width:235px;min-width: 230px">
+                            
+                                <div class="card" style="width:100%; margin: 5px 5px;">
+                                    <img src="{{pelicula.imagen.url}}" class="card-img-top" >
+                                    <div class="card-body" style="text-align: center;";>
+                                        <h6 class="card-title" > {{pelicula.titulo1}}</h6>
+                                        
+                                        {% if pelicula.calificacion.calificacion == "5" %}
+                                        
+                                        
+                                    
+                                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="5" style="color:orange ;"></span>
+                                        
+                                        {% endif %}
+                
+                                        {% if pelicula.calificacion.calificacion == "4" %}
+                                        
+                                    
+                                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="5" ></span>
+                                        
+                                        {% endif %}
+                                        {% if pelicula.calificacion.calificacion == "3" %}
+                                        
+                                    
+                                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="4" ></span>
+                                        <span class="fa fa-star" id="5" ></span>
+                                        
+                                        {% endif %}
+                                        {% if pelicula.calificacion.calificacion == "2" %}
+                                        
+                                    
+                                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="3" ></span>
+                                        <span class="fa fa-star" id="4" ></span>
+                                        <span class="fa fa-star" id="5" ></span>
+                                        
+                                        {% endif %}
+                                        
+                                        {% if pelicula.calificacion.calificacion == "1" %}
+                                        
+                                    
+                                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                                        <span class="fa fa-star" id="2"></span>
+                                        <span class="fa fa-star" id="3" ></span>
+                                        <span class="fa fa-star" id="4" ></span>
+                                        <span class="fa fa-star" id="5" ></span>
+                                        
+                                        {% endif %}
+                                        
+                
+                                    </div><!-- cierra car body  -->
+                                    
+                                    <div class="card-footer text-center" ><div style="color: blue;"> {{ pelicula.tipo.tipo }} </div><a href="{% url 'agregarp' pelicula.id pag_actual ini %}" class="btn btn-outline-success" style="border-radius: 20px" >Agregar</a><div style="color: blue;"> ${{ pelicula.precio }} </div></div>
+                
+                
+                
+                                </div><!-- cierra car  -->
+                                
+                            </div><!-- cierra col  -->
+                        {%endfor %}
+                    </div><!-- cierra car row  -->
+                </div><!-- cierra car contenedor  -->
+                <div style="width: 960px;overflow: hidden"> <!--BARRA PAGINACION-->
+                    <div  style="width: 30%;float: left;" >
+    
+                        {% include "paginacion.html" %}
+                
+                    </div>
+                    <div  style="width: 70%;float: right;text-align: right;" >
+    
+                        <!--solucion para paginacion a la izquierda hehe-->
+                
+                    </div>
+                 </div>
+
+
+
+
+
+
+                </div>
+                
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <!-- PIE DE PAGINA  -->
+        <!--NOTAS ABAJO-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:50px;color: rgba(139, 27, 27, 0.61);margin-top: 20px;"><!--MENU--> 
+            <h5>Las películas que no estén en el catalogo puede agregarla al confirmar su pedido y se le informara del costo por teléfono</h5>
+        </div>
+        <!--terminos y ayuda-->
+        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:60px;"><!--MENU--> 
+            <div style="width: 50%;color: rgba(122, 124, 122, 0.986);float: left;text-align:left"> <h5>Términos y Condiciones</h5></div>
+            <div style="width: 50%;float: right;text-align:right"> <h5><a href="/ayuda/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986)">Ayuda </a> </h5> </div>
+
+        </div>
+    </div>
 </div>
 
 
-{% endblock %}  
+

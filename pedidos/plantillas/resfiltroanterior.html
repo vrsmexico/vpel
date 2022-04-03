@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+    {%load static%}
+
+
+{% block content %}
+ 
+<nav  class="container align-items-center" style="min-height: 5vh"> 
+    <br>   
+
+
+
+    <div class="container align-items-center" style="text-align: center;">
+        <h5>Filtrar por:</h5> 
+        <div class="row justify-content-md-center">
+
+
+            <div class="col">
+                <form action="/resfiltro/" method="POST" style="text-align: center;" class="d-flex justify-content-center">
+                {% csrf_token %}
+
+
+                <select name="clasif"class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
+                <option value=0 selected >Calificación</option>
+                <option value="1" style="margin-left: 6px;">1 Estrella</option>
+                <option value="2"> 2 Estrellas</option>
+                <option value="3"> 3 Estrellas</option>
+                <option value="4"> 4 Estrellas</option>
+                <option value="5"> 5 Estrellas</option>
+                </select>
+
+
+                <select name="gene" class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;">
+                    <option value=0 selected style="color: rgb(255, 255, 255);">Genero</option>
+                    {% for genero in generos %}
+                    <option value={{genero.id}}>{{genero.genero}}</option>
+                    {% endfor %}
+                </select>
+                <select name="fec"class="btn" style="background: #026ea0;width: 15%;float: left;;color: rgb(255, 255, 255);border-bottom: 2px solid #026ea0;width: 100%;margin-right: 5px;border-radius: 5px;" >
+                    <option value=0 selected style="color: rgb(255, 255, 255);">Año</option>
+                    {% for fecha in fechas %}
+                    <option value={{fecha.id}}>{{fecha.fecha}}</option>
+                    {% endfor %}
+                </select>
+
+                 &nbsp
+                <input type="submit" class="btn-outline-success" style="border-radius: 40px;" value="VER" onclick=mensajes() >
+
+                </form>
+            </div>
+        </div>
+        <form action="/buscar/" method="POST" style="text-align: center;" class="d-flex justify-content-center"> 
+            {% csrf_token %}
+            <input class="form" type="text" placeholder="Ingrese el nombre a buscar" name="buscarpr"> &nbsp
+            <input type="submit" class="btn btn-outline-dark" value="Buscar"  style="border-radius: 20px">
+            
+        </form>
+    </div>
+    </nav>
+
+
+
+
+
+<div class="container " style="text-align: center;color: rgb(4, 148, 76);min-width: 960px;max-width: non;width: 970px;">
+<h2>{{mensaje}} </h2></div>
+ 
+<div class="container align-content-center"  >
+    
+        {% include "paginacion.html" %}
+
+    </div>
+
+<div class="container" style="min-width: 960px;max-width: non;width: 970px;">
+    <div class="row" >
+        {%for pelicula in peliculas %}
+            <div class="col-md-3" style="max-width:240px ;width:235px;min-width: 230px">
+            
+                <div class="card" style="width:100%; margin: 5px 5px;">
+                    <img src="{{pelicula.imagen.url}}" class="card-img-top" >
+                    <div class="card-body" style="text-align: center;";>
+                        <h6 class="card-title" > {{pelicula.titulo1}}</h6>
+                        
+                        {% if pelicula.calificacion.calificacion == "5" %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="5" style="color:orange ;"></span>
+                        
+                        {% endif %}
+
+                        {% if pelicula.calificacion.calificacion == "4" %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        {% if pelicula.calificacion.calificacion == "3" %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        {% if pelicula.calificacion.calificacion == "2" %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" ></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        
+                        {% if pelicula.calificacion.calificacion == "1" %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2"></span>
+                        <span class="fa fa-star" id="3" ></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        
+
+                    </div><!-- cierra car body  -->
+                    <div class="card-footer text-center" ><div style="color: blue;"> {{ pelicula.tipo.tipo }} </div><a href="{% url 'agregarp' pelicula.id pag_actual ini %}" class="btn btn-outline-success" style="border-radius: 20px" >Agregar</a><div style="color: blue;"> ${{ pelicula.precio }} </div></div>
+                    
+
+
+                </div><!-- cierra car  -->
+            </div><!-- cierra col  -->
+        {%endfor %}
+    </div><!-- cierra car row  -->
+</div><!-- cierra car contenedor  -->
+<div>
+{% include "paginacion.html" %}
+</div>
+
+
+{% endblock %}  

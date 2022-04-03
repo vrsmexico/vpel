@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form class="form-control" method="POST" style="text-align: center;" >
+    {% csrf_token %}
+   <h3>Todos los campos son requeridos</h3>
+    {% for field in form %}
+    <div class="form-control" >
+      {% if field.label == "Username" %}
+      <p style="color: rgb(240, 0, 0);">Con este usuario iniciará sesión siempre</p>
+        
+      {% endif %}
+      {% if field.errors %} 
+      {% if field.label == "Username" %}
+      <p style="color: rgb(240, 0, 0);">Usuario ya registrado</p>
+        
+      {% endif %}
+      {% if field.label == "Confirma contraseña" %}
+      <p style="color: rgb(248, 0, 0);">Debe contener al menos 8 caracteres;Pueden ser letras y numeros</p>
+      
+        
+      {% endif %}
+
+
+
+      
+      {% endif %}
+
+      
+      {{ field.label_tag }}<br>>
+      {{field}} 
+      
+
+
+      
+
+
+    </div>
+    
+
+
+    {% endfor %}
+    <br>
+
+
+    <button type="submit" class="btn btn-outline-success">Registrarse</button>
+</form>
+
+
+{% if messages  %}
+    {%  for message in messages %}
+    
+    <div class="{{ message.tags }}"  >
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+              
+              <strong class="me-auto">Bootstrap</strong>
+              <small>11 mins ago</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+               
+                    {{ message }}
+            
+                
+            </div>
+          </div>
+    <div>
+
+
+
+    {% endfor %}
+
+{% endif %}
+{% endblock %}

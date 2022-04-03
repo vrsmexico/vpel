@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gjbkq6hf1ga+vv2h@2vkk0#)cyof5e+2gc_+i4$5^w*pjb1#*)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['64.225.20.220']
+ALLOWED_HOSTS = ['www.vpelmexicali.com','vpelmexicali.com','143.198.67.199']
+
 
 
 # Application definition
@@ -75,14 +76,7 @@ WSGI_APPLICATION = 'VPEL.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-#if DEBUG:
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.sqlite3',
-#            'NAME': BASE_DIR / 'db.sqlite3',
-#        }
-#    }
-#else:
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -91,8 +85,21 @@ DATABASES = {
         'PASSWORD': 'Jm1053',
         'HOST': 'localhost',
         'PORT': '',
+        'TIME_ZONE': 'Mexico/BajaNorte',
         }
 }
+
+#DATABASES = {
+ 
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   #     'NAME': 'vpel',
+    #    'USER': 'vpel1053',
+     #   'PASSWORD': 'Jm1053',
+      #  'HOST': 'localhost',
+       # 'PORT': '',
+        #}
+#}
 
 
 # Password validation
@@ -105,12 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    
+    
 ]
 
 
@@ -129,7 +132,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles/')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 MEDIA_URL='/media/'
 

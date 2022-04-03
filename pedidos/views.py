@@ -8,10 +8,12 @@ from .carro import Carro
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import agregarform
+from .forms import agregarform,encuesta,deudarocio
 from django.core.paginator import Paginator
 from django.urls import path
+from datetime import datetime
 
+from django.utils import timezone
 
 
 
@@ -35,6 +37,7 @@ def inicio(request):
     sigpag=pag_actual+1
     paginas=range(1,peliculas.paginator.num_pages + 1)
     ini=0
+    
 
     return render(request,'cata.html',{"ini":ini,"cantp":cantp,'user':usua,"generos":generos,"fechas":fechas,"peliculas":peliculas,"califs":califs,"num":numpeliculas,"paginas":paginas,"pag_actual":pag_actual,"pagante":pagante,"sigpag":sigpag})
 
@@ -56,14 +59,14 @@ def registro(request):
 
             username=form.cleaned_data['username']
             messages.success(request,f'Usuario {username} creado')
-            return redirect('catalogo')
+            return redirect('login')
     else:
         form=UserRegisterForm()
     context={'form':form}
     return render(request,'registro.html',context)
 
 
-def perfil(request):
+def perfil(request,num=0):
     current_user=request.user
     usua=current_user
     usua=str(usua)
@@ -71,29 +74,18 @@ def perfil(request):
     numpedi=len(pedi)
     lista=[]
     
-
+   
     for ped in pedi:
         if ped.user ==usua :
             lista.append(int(ped.id))
-    suspedidos=Pedidos.objects.filter(id__in=lista)
+    suspedidos=Pedidos.objects.filter(id__in=lista)[:10]
     if len(suspedidos) == 0:
         suspedidos=""
-    
-
-
-
+   
 
 
     
-    return render(request,'perfil.html',{"suspedidos":suspedidos})
-
-
-
-
-
-
-
-
+    return render(request,'perfil.html',{"suspedidos":suspedidos,"num":num})
 
 
 def agregar(request):
@@ -492,6 +484,7 @@ def historial(request,total_carro):
     pedido=servicio.objects.filter(id__in=listap)
     prec=0
     for pedid in pedido:
+        
         prec=prec+pedid.precio
         
     
@@ -558,7 +551,7 @@ def confirmacion(request):
     carro.limpiar_carro()
 
     
-    return redirect('/perfil/')
+    return redirect('/perfil/1')
 
 def vpel1053(request):
     entregar=Pedidos.objects.all()
@@ -571,8 +564,12 @@ def vpel1053(request):
             
 
     pedi=Pedidos.objects.filter(id__in=lista)
+    if request.method=="POST":
+        fechass=request.POST["fecha"]
+        guardarfecha=fecha(fecha=fechass)
+        guardarfecha.save()
     
-
+    
     return render(request,'vpel1053.html',{"suspedidos":pedi})
 def listop(request,suspedido_id):
     pedi=int(suspedido_id)
@@ -594,6 +591,218 @@ def serie(request):
     todas=servicio.objects.filter(tipo__in=lista)
     ini=2
     return render(request,"series.html",{"resultados":todas,"ini":ini,})
+def gastos(request):
+    model=Cuentas
+    if request.method=="POST":
+        cantidad=request.POST["canti"]
+        concepto=request.POST["conce"]
+        if 'ganper' in request.POST:
+            ganancia = request.POST['ganper']
+
+        else:
+            ganancia = 0
+    
+        
+        
+        if ganancia == '1':
+            a=Cuentas(canti=cantidad,ganper=1,conce=concepto,importa=0,entraporcen=0)
+            form=encuesta(request.POST,instance=a)
+            form.save()
+            return redirect("/miperfil/")
+
+        else:
+            if 'importa' in request.POST:
+                importante = request.POST['importa']
+                
+            else:
+                importante = 0
+            
+            if importante == '1':
+                
+                a=Cuentas(canti=cantidad,ganper=0,conce=concepto,importa=1,entraporcen=1)
+                form=encuesta(request.POST,instance=a)
+                form.save()
+                return redirect("/miperfil/")
+
+
+            else:
+                a=Cuentas(canti=cantidad,ganper=0,conce=concepto,importa=0,entraporcen=1)
+                form=encuesta(request.POST,instance=a)
+                form.save()
+                return redirect("/miperfil/")
+    else:
+        forma=encuesta()
+
+    return render(request,"gastos.html",{"forma":forma})
+def miperfil(request,num=54):
+    
+    sema=datetime.now()
+    sema=sema.strftime("%W")
+    if num>=0 and num<54:
+        semactual=str(num)
+    else:
+        semactual=datetime.now()
+        
+        semactual=semactual.strftime("%W")
+    
+
+    totalaldia=0
+    positisdia=0
+    negatidia=0
+    positis=0
+    cuentas=Cuentas.objects.filter(entraporcen__in='1')
+    cuentapositivas=Cuentas.objects.filter(entraporcen__in='0')
+    for cuentapositiva in cuentapositivas:
+        fechaposi=cuentapositiva.create
+        
+        fechaposi=fechaposi.strftime("%W")
+        positisdia=positisdia+cuentapositiva.canti #CON ESTO OBTENEMOS LA GANANCIA DE TOD EL A;O
+        if fechaposi==semactual:
+            positis=positis+cuentapositiva.canti #CON ESTO LA GANANCIA DE LA SEMANA
+
+    admisemana=0
+    for cuenta in cuentas:
+        fechacuenta=cuenta.create
+        fechacuenta=fechacuenta.strftime("%W")
+        negatidia=negatidia+cuenta.canti #CON ESTO OBTENEMOS LOS GASTOS DEL A;O
+        if fechacuenta==semactual:
+            admisemana=admisemana+cuenta.canti #CON ESTO GASTOS TOTALES POR SEMANA
+    total=positis-admisemana #TOTAL POR SEMANA
+    totalaldia=positisdia-negatidia #TOTAL POR A;O
+    columna=[]
+    data=[]
+    gastosmayores=[]
+    for cuenta in cuentas:
+        fechacuenta=cuenta.create
+        
+        
+        fechacuenta=fechacuenta.strftime("%W")
+        
+        if fechacuenta==semactual:
+            porce=(cuenta.canti/positis)*100
+            porce=round(porce,2)
+            porcegas=(cuenta.canti/admisemana)*100
+            porcegas=round(porcegas,2)
+            
+            
+            fila=[]
+            data.append(
+                {
+                    'name': cuenta.conce,
+                    'y':porcegas,
+                    'cant':cuenta.canti
+
+                })
+            fila.append(porce)
+            fila.append(cuenta.conce)
+            fila.append(cuenta.canti)
+            if porce >80:
+                
+                gastosmayores.append(fila)
+            else:
+                
+                columna.append(fila) #LISTA CON PORCENTAJES Y CONCEPTOS DE GASTO
+    x=len(columna)
+    
+   
+    
+    return render(request,"miperfil.html",{"total":totalaldia,"totalsemana":total,"matrizsem":columna,"gastosmayores":gastosmayores,"n":x,"data":data,"gastos":admisemana,"semana":semactual,"range":range(54),"sema":sema,"ganados":positis})
+def deuda(request):
+    
+    model=Gastos
+    if request.method=="POST":
+        cantidad=request.POST["cantidad"]
+        concepto=request.POST["concep"]
+        if 'importancia' in request.POST:
+            importante = request.POST['importancia']#ES 1 CUANDO ES ABONO 
+        else:
+            importante = 0  #ES 0 CUANDO ES DINERO GASTADO
+    
+        
+        
+        if importante == '1':     #seria pago JOSE
+            a=Gastos(cantidad=cantidad,ganoper=1,concep=concepto,importancia=1)
+            form=deudarocio(request.POST,instance=a)
+            form.save()
+            return redirect("/deuda/")
+
+        else:
+            if 'ganoper' in request.POST:
+                ganoper = request.POST['ganoper'] #a mi favor
+                
+            else:
+                ganoper = 0 #a favor de rocio
+            
+            if ganoper == '1':
+                
+                a=Gastos(cantidad=cantidad,ganoper=1,concep=concepto,importancia=0)
+                form=deudarocio(request.POST,instance=a)
+                form.save()
+                return redirect("/deuda/")
+
+
+            else:
+                a=Gastos(cantidad=cantidad,ganoper=0,concep=concepto,importancia=0)
+                form=deudarocio(request.POST,instance=a)
+                form.save()
+                return redirect("/deuda/")
+    else:
+        forma=deudarocio()
+        cuent=Gastos.objects.filter(importancia__in='0')
+        abon=Gastos.objects.filter(importancia__in='1')
+        
+        total=0
+        listar=[]
+        listaj=[]
+        for i in cuent:
+            if i.ganoper == 0:
+                
+                deuda=i.cantidad/2
+                total=total+deuda
+                fila=[]
+                fila.append(i.concep)
+                fila.append(i.cantidad)
+                fila.append(i.created)
+                listar.append(fila)
+                
+            else:
+                deuda=i.cantidad/2
+                total=total-deuda
+                fila=[]
+                fila.append(i.concep)
+                fila.append(i.cantidad)
+                fila.append(i.created)
+                listaj.append(fila)
+        for i in abon:
+
+            total=total-i.cantidad
+            fila=[]
+            fila.append(i.concep)
+            fila.append(i.cantidad)
+            fila.append(i.created)
+            listaj.append(fila)
+
+
+
+
+
+        
+
+    return render(request,"deuda.html",{"forma":forma,"total":total,"listaj":listaj,"listar":listar,})
+def ayuda(request):
+    
+    return render(request,"ayuda.html")
+
+    
+    #now=datetime.now()
+    #dia=now.strftime("%A")
+    #fecha=pedid.created
+    #formato=fecha.strftime("%W")
+    #print(formato)
+    #print (dia)
+    
+    
+    #return render(request,'gastos.html',{"suspedidos":pedi})
 
 
 

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+    {%load static%}
+
+
+
+{% block content %}
+
+
+
+<div class="container" style="min-width: 960px;max-width: non;width: 970px;">
+    
+    <div class="row" >
+        {%for resultado in resultados %}
+            <div class="col-md-3" style="max-width:240px ;width:235px;min-width: 230px">
+            
+                <div class="card" style="width:100%; margin: 5px 5px;">
+                    <img src="{{resultado.imagen.url}}" class="card-img-top" >
+                    <div class="card-body" style="text-align: center;";>
+                        <h6 class="card-title" > {{resultado.titulo1}}</h6>
+                        
+                        {% if resultado.calificacion.id == 5 %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="5" style="color:orange ;"></span>
+                        
+                        {% endif %}
+
+                        {% if resultado.calificacion.id == 4 %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        {% if resultado.calificacion.id == 3 %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        {% if resultado.calificacion.id == 2 %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="3" ></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        
+                        {% if resultado.calificacion.id == 1 %}
+                        
+                    
+                        <span class="fa fa-star" id="1" style="color:orange ;"></span>
+                        <span class="fa fa-star" id="2"></span>
+                        <span class="fa fa-star" id="3" ></span>
+                        <span class="fa fa-star" id="4" ></span>
+                        <span class="fa fa-star" id="5" ></span>
+                        
+                        {% endif %}
+                        
+
+                    </div><!-- cierra car body  -->
+                    <div class="card-footer text-center" ><div style="color: blue;"> {{ resultado.tipo.tipo }} </div><a href="{% url 'agregarp' resultado.id 1 ini %}" class="btn btn-outline-success" style="border-radius: 20px" >Agregar</a><div style="color: blue;"> ${{ resultado.precio }} </div></div>
+                    
+
+
+                </div><!-- cierra car  -->
+            </div><!-- cierra col  -->
+        {%endfor %}
+        
+        
+    </div><!-- cierra car row  -->
+</div><!-- cierra car contenedor  -->
+
+
+
+
+
+
+
+{% endblock %}  

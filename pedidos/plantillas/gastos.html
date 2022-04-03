@@ -16,32 +16,25 @@
     <!--parte derecha-->
     <div style="background-color: rgb(31, 43, 78);width: 28%;float: right;min-height: 1080px;height:100%;box-shadow: -6px 6px 3px   rgba(0, 0, 0, 0.267);padding: 1%;overflow-y: scroll;">
             <div style="width: 100%;overflow: hidden;margin-bottom: 30px;"><!--USUARIO,LOGO Y MARCA -->
-                <div style="width: 40%;float: left;"><!--USUARIO -->
-                    {% if request.user.is_authenticated %}
-                    <a   href="/perfil/" style="text-decoration: none;"><h4 style="color: aliceblue;"> {{ user.username }}</h4></a>
-                    
-
-
-                   
-                   {% endif %}
-
-                </div>
+               
                 <div style="width: 60%;float: right;text-align:right ;"><!--LOGO Y MARCA -->
                 <h3 style="color: aliceblue;" > VPEL</h3>
                 </div>
 
             </div>
             <div style="padding: 0.1em;width: 100%;overflow: hidden;" ><!--LISTA DE PEDIDOS-->
-
-
-                <h5 style="color: aliceblue;" >AGREGAR UNA FECHA DE PELICULAS A LA BASE DE DATOS<br></h5>
-
-                <form action="/vpel1053/" method="POST">  {% csrf_token %}
-                    <input type="text" name="fecha">
-                    <input type="submit" value="agregar">
-
-                </form>
                 
+                <div style="width: 100%;overflow: hidden"> <!--BARRA PAGINACION-->
+                    
+                 </div>
+                 
+                <h5 style="color: aliceblue;" >En caso de no recordar usuario o contraseña puede registrarse nuevamente<br></h5>
+                <a class="btn btn-success" href='/registro/'  style="background: #ff8a00;border-radius: 20px;box-shadow: 0 0 20px rgb(0 22 67 / 7%);
+                    border-radius: 40px;
+                    font-weight: 700;
+                    font-size: 15px;
+                    border: 1px solid transparent;
+                    white-space: nowrap;margin: 10px;">REGISTRARSE</a>
             </div>
             
 
@@ -60,74 +53,61 @@
             </div>
             <div style="width: 50%;float: right;text-align:right"> 
                 {% if request.user.is_authenticated %}
-                    {% if user.is_superuser %}
-
-                   <a href="/vpel1053/" style="text-decoration: none;color: rgba(170, 122, 82, 0.986);font-size:30px;font-weight: 500;">PEDIDOS </a>
-                    {% endif %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-
-                    {% if user.is_staff %}
-
-                   <a href="/agregar/" style="text-decoration: none;color: rgba(7, 143, 7, 0.986);font-size:30px;font-weight: 500;">AGREGAR </a>
-                    {% endif %}
-                    
-                    
-                {% endif %}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                {% if request.user.is_authenticated %}
                     <a href="/logout/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Cerrar sesión </a>
                     {% else %}
                     <a href="/login/" style="text-decoration: none;color: rgba(122, 124, 122, 0.986);font-size:30px;font-weight: 500;">Iniciar sesión </a>
                    {% endif %}
                 
-                
-
-
-
-
-                
              </div>
 
         </div>
-        <!--NOTAS ARRIBA-->
-        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:40px;color: rgba(139, 27, 27, 0.61);"><!--MENU--> 
-            <h5></h5>
+        
+        <!--CONTENIDO -->
+        <div class="container" style="background: white;text-align: center; height: 80%; ">
+            <div style="width: 100%;"><h3>Registro de gastos semanales</h3> <br></div>
+            <div  style="width: 37%;float: right;text-align: right;height: 80%;" >
+        
+                <!--solucion para paginacion a la izquierda hehe-->
+        
+            </div>
+            <div style="width: 25%;float: right;text-align: right;height: 80%;" >
+                
+
+            
+
+                <form enctype="multipart/form-data"  method="POST"  >
+                    {% csrf_token %}
+                    <h4 style="color: rgb(20, 163, 1);"> Dinero recibido:</h4>
+                    
+                    {{ forma.canti}} 
+                    <div class="form-check form-switch">
+                        
+                        {{ forma.ganper}}
+                        <label class="form-check-label" for="flexSwitchCheckDefault"> activo es porque RECIBISTE</label>
+
+                    </div>
+                    <h4 style="color: rgb(20, 163, 1);"> Concepto:</h4>
+                    {{ forma.conce}}
+                    <div class="form-check form-switch">
+                        {{ forma.importa}}
+                        <label class="form-check-label" for="flexSwitchCheckDefault">activo es un gasto importante</label>
+                    </div>
+                    
+                    
+                    
+                    
+                    <input type="submit" value="agregar">
+            
+                </form>
+                
+            </div>
+            <div  style="width: 38%;float: right;text-align: right;height: 80%;" >
+        
+              <!--solucion para paginacion a la izquierda hehe-->
+        
+            </div>
+        
         </div>
-        <!--CONTENIDO PELICULAS-->
-        <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);min-width: 960px;"><!--MENU--> 
-            <div class="container" style="background: white;">  <div  style="text-align: center;" >  <h5>BIENVENIDO TONY </h5></div>
-    <br>
-
-
-
-{% for suspedido in suspedidos %} 
-<table class="table table-bordered" style="color: rgb(2, 2, 2);">
-<tbody>
-<tr class="text-center" >
-    <td style="background: rgb(243, 185, 27);"> USUARIO</td>  <td style="background: rgb(243, 185, 27);"> PEDIDO </td> <td style="background: rgb(243, 185, 27);">FECHA</td> <td style="background: rgb(243, 185, 27);" >PRECIO</td><td style="background: rgb(243, 185, 27);">COMENTARIOS</td><td style="background: rgb(243, 185, 27);">INFO CONTACTO</td>
-</tr>
-
-<tr class="text-center">
-     <td >{{ suspedido.user }} <div class="btn" style="background: red;border-radius: 20px">
-        <a href="{% url 'listop' suspedido.id %}" style="text-decoration: none;color: white;">listo</a></div></div></td>
-    
-    
-    <td> {{ suspedido.content }} </td> <td>{{ suspedido.timestamp }}</td> <td>{{ suspedido.masinfo }}</td><td>{{ suspedido.comentarios }}</td><td>{{ suspedido.memorias }}</td>
-</tr>
-</tbody>
-</table>
-
-{% endfor %}
-
-
-
-
-
-</div>
-        </div>
-        <!-- PIE DE PAGINA  -->
-        <!--NOTAS ABAJO-->
         
         <!--terminos y ayuda-->
         <div style="width: 100%;overflow: hidden;padding: 0.2em;background-color: rgb(255, 255, 255);height:60px;"><!--MENU--> 
@@ -153,3 +133,9 @@
 
 
 </html>
+
+
+
+
+
+

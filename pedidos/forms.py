@@ -29,7 +29,36 @@ class agregarform(ModelForm):
     class Meta:
         model=servicio
         exclude = ['tlim1','tlim2','tlim3','tlim4','precio','created','updated','calif']
-
+class encuesta(ModelForm):
+    class Meta:
+        model=Cuentas
+        exclude = ['create','entraporcen']
+        fields=('ganper','conce','importa','canti')
+        widgets={
+            
+            
+            'ganper': forms.CheckboxInput(attrs={'class':"form-check-input", "id": "ganper","value":1}),
+            'conce': forms.TextInput(attrs={'class':'form-control','placeholder':'Ingrese el concepto del gasto'}),
+            'importa': forms.CheckboxInput(attrs={'class':"form-check-input", "id": "importa","value":1}),
+            'canti': forms.NumberInput(attrs={'class':'form-control'}),
+            
+            
+        }
+class deudarocio(ModelForm):
+    class Meta:
+        model=Gastos
+        exclude = ['created','entraporcen']
+        fields=('ganoper','concep','cantidad','importancia')
+        widgets={
+            
+            
+            'ganoper': forms.CheckboxInput(attrs={'class':"form-check-input", "id": "ganoper","value":1}),
+            'concep': forms.TextInput(attrs={'class':'form-control','placeholder':'Ingrese el concepto del pago'}),
+            'importancia': forms.CheckboxInput(attrs={'class':"form-check-input", "id": "importancia","value":1}),
+            'cantidad': forms.NumberInput(attrs={'class':'form-control'}),
+            
+            
+        }
 
         
 

@@ -13,7 +13,7 @@
                         {% if pag_actual %}
                         {{value.precio}} <a href="{% url 'eliminar' value.producto_id pag_actual ini %}" class="btn btn-outline-danger">x</a>
                         {% else %}
-                        {{value.precio}} <a href="{% url 'eliminar' value.producto_id 1 ini %}" class="btn btn-outline-danger">x</a>
+                        {{value.precio}} <a href="{% url 'eliminar' value.producto_id 1 ini %}" class="btn btn-outline-danger" style="padding: 0.01em;">x</a>
                         {% endif %}
                     </td>
                   
@@ -22,6 +22,8 @@
 
                 </tr>
             {% endfor %}
+
+            
             {% if total_carro < 199 %}
             <tr class="text-center">
                 <td>Memoria USB</td>
